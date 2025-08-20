@@ -144,3 +144,102 @@ function insertElement(svg, id) {
     }
   }, 10);
 }
+
+document.documentElement.lang === "fa" ? initialFAPrep() : initialENPrep();
+// initialFAPrep();
+// setTimeout(() => {
+//   console.log("changing");
+//   changeLanguage(document.documentElement.lang === "en" ? "fa" : "en");
+// }, 3000);
+// changeLanguageInterval();
+
+function changeLanguageInterval() {
+  setInterval(() => {
+    console.log("changing");
+    changeLanguage(document.documentElement.lang === "en" ? "fa" : "en");
+  }, 3000);
+}
+
+// initial Fa
+// En element must be position absolute, height 100%, opacity 0
+// The width should be equal to Fa's width
+// left equal to the common width value but negative (ex. -612)
+function initialFAPrep() {
+  const farsiElement = document.querySelector("#info-farsi");
+  const englishElement = document.querySelector("#info-english");
+
+  englishElement.style.position = "absolute";
+  englishElement.style.height = "100%";
+  englishElement.style.opacity = 0;
+  englishElement.style.width = `${farsiElement.offsetWidth}px`;
+  englishElement.style.left = `-${farsiElement.offsetWidth - 16}px`; // take out one margin
+
+  document.documentElement.lang = "fa";
+  document.documentElement.classList.remove("page__lang__en");
+  document.documentElement.classList.add("page__lang__fa");
+
+  setTimeout(() => {
+    Array.from(document.querySelectorAll(".personal_wrapper")).forEach(
+      (elem) => {
+        elem.classList.add("personal_wrapper__transition");
+      }
+    );
+  });
+}
+
+function initialENPrep() {
+  const farsiElement = document.querySelector("#info-farsi");
+  const englishElement = document.querySelector("#info-english");
+
+  englishElement.style.width = `${farsiElement.offsetWidth}px`;
+
+  farsiElement.style.position = "absolute";
+  farsiElement.style.height = "100%";
+  farsiElement.style.opacity = 0;
+  farsiElement.style.right = `16px`;
+
+  document.documentElement.lang = "en";
+  document.documentElement.classList.remove("page__lang__fa");
+  document.documentElement.classList.add("page__lang__en");
+
+  setTimeout(() => {
+    Array.from(document.querySelectorAll(".personal_wrapper")).forEach(
+      (elem) => {
+        console.log(elem);
+        elem.classList.add("personal_wrapper__transition");
+      }
+    );
+  });
+}
+
+function changeLanguage(lang) {
+  const farsiElement = document.querySelector("#info-farsi");
+  const englishElement = document.querySelector("#info-english");
+  const main = document.querySelector("main");
+
+  if (lang === "en") {
+    farsiElement.style.transform = `translateX(100%)`;
+    farsiElement.style.opacity = 0;
+
+    main.style.transform = `translateX(${farsiElement.offsetWidth}px)`;
+
+    englishElement.style.transform = `translateX(100%)`;
+    englishElement.style.opacity = 1;
+  } else if (lang === "fa") {
+    farsiElement.style.transform = `translateX(0)`;
+    farsiElement.style.opacity = 1;
+
+    main.style.transform = `translateX(0)`;
+
+    englishElement.style.transform = `translateX(0)`;
+    englishElement.style.opacity = 0;
+  }
+
+  document.documentElement.lang = lang;
+}
+
+function toggleLanguage() {
+  document.documentElement.lang === "en"
+    ? changeLanguage("fa")
+    : changeLanguage("en");
+}

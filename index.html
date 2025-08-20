@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" class="page__lang__fa">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="src/switch.css" />
     <link rel="stylesheet" href="src/Vazirmatn-font-face.css" />
     <title>محسن افشاری</title>
+    <!-- TODO: no github link -->
   </head>
   <body>
     <div class="page__wrapper max-width-wrapper">
@@ -146,11 +147,10 @@
       </main>
 
       <section
-        style="position: relative"
-        class="personal_wrapper max-width-wrapper"
+        id="info-farsi"
+        class="personal__wrapper max-width-wrapper personal__info__farsi"
       >
         <div style="position: sticky; top: 16px">
-          <!-- TODO: no github link -->
           <p>سلام محسن افشاری هستم</p>
           <ul>
             <li>
@@ -178,6 +178,15 @@
             <li><p>متولد سال 1375 هستم</p></li>
             <li><p>از سربازی معافیت دارم</p></li>
           </ul>
+        </div>
+      </section>
+
+      <section
+        id="info-english"
+        class="personal__wrapper max-width-wrapper personal__info__english"
+      >
+        <div style="position: sticky; top: 16px">
+          <p>Hi, I'm Mohsen Afshari</p>
         </div>
       </section>
 
