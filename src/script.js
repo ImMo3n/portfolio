@@ -160,10 +160,11 @@ function changeLanguageInterval() {
   }, 3000);
 }
 
+// Why not make both the Fa and En elements absolute
+// Because I lose the dynamic sizing of the main element
+// I want Fa to be not absolute so it can take some space from main element
+
 // initial Fa
-// En element must be position absolute, height 100%, opacity 0
-// The width should be equal to Fa's width
-// left equal to the common width value but negative (ex. -612)
 function initialFAPrep() {
   const farsiElement = document.querySelector("#info-farsi");
   const englishElement = document.querySelector("#info-english");
@@ -178,13 +179,7 @@ function initialFAPrep() {
   document.documentElement.classList.remove("page__lang__en");
   document.documentElement.classList.add("page__lang__fa");
 
-  setTimeout(() => {
-    Array.from(document.querySelectorAll(".personal_wrapper")).forEach(
-      (elem) => {
-        elem.classList.add("personal_wrapper__transition");
-      }
-    );
-  });
+  addTransitionToPersonalWrappers();
 }
 
 function initialENPrep() {
@@ -202,11 +197,15 @@ function initialENPrep() {
   document.documentElement.classList.remove("page__lang__fa");
   document.documentElement.classList.add("page__lang__en");
 
+  addTransitionToPersonalWrappers();
+}
+
+function addTransitionToPersonalWrappers() {
   setTimeout(() => {
-    Array.from(document.querySelectorAll(".personal_wrapper")).forEach(
+    Array.from(document.querySelectorAll(".personal__wrapper")).forEach(
       (elem) => {
         console.log(elem);
-        elem.classList.add("personal_wrapper__transition");
+        elem.classList.add("personal__wrapper__transition");
       }
     );
   });

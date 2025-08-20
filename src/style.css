@@ -40,10 +40,6 @@ body {
   position: relative;
 }
 
-.main__wrapper__transition__rtl {
-  transform: translateX(628px);
-}
-
 .personal__wrapper {
   background-color: hsl(0, 0%, 13%);
   color: hsl(0, 0%, 100%);
@@ -56,17 +52,6 @@ body {
 .personal__wrapper > div {
   position: sticky;
   top: 16px;
-}
-
-.personal__wrapper__transition__rtl {
-  right: 0;
-  transform: translateX(628px);
-  opacity: 0.1;
-}
-
-.personal__wrapper__transition__ltr {
-  transform: translateX(628px);
-  opacity: 0.1;
 }
 
 .personal__wrapper__english {
