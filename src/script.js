@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   addResizeListener();
 });
 
+// remove animation for timeline if user zooms in on the page we don't want to have the transform animating
 window.onload = () => {
   const timelineElements = document.querySelectorAll(
     ".timeline__begin__animation"

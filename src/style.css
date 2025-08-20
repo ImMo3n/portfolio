@@ -1,3 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Vazirmatn, sans-serif;
+}
+
 body {
   margin: 0;
   background-color: hsl(0, 0%, 12%);
@@ -5,6 +15,9 @@ body {
 
 .page__lang__fa {
   direction: rtl;
+}
+.page__lang__en {
+  direction: ltr;
 }
 
 .page__wrapper {
