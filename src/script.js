@@ -400,3 +400,23 @@ function changeLanguageHeader(lang) {
     persianHeader.style.opacity = 1;
   }
 }
+
+document.querySelector("#lightModeCheckbox").addEventListener("change", (e) => {
+  const isLightMode = e.target.checked;
+
+  changeDarkMode(isLightMode);
+});
+
+changeDarkMode(
+  document.documentElement.classList.contains("dark") ? false : true
+);
+
+function changeDarkMode(isLightMode) {
+  if (isLightMode) {
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
+  } else {
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add("dark");
+  }
+}

@@ -1,16 +1,42 @@
+:root {
+  --font-color: hsl(0, 0%, 100%);
+  --body-background-color: hsl(0, 0%, 100%);
+  --personal-info-background-color: hsl(0, 0%, 100%);
+  --main-background-color: hsl(0, 0%, 100%);
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html.dark {
+  --font-color: hsl(0, 0%, 100%);
+  --body-background-color: hsl(0, 0%, 12%);
+  --personal-info-background-color: hsl(0, 0%, 13%);
+  --main-background-color: hsl(0, 0%, 19%);
+}
+
+html.light {
+  --font-color: hsl(0, 0%, 0%);
+  --body-background-color: hsl(0, 0%, 100%);
+  --personal-info-background-color: hsl(0, 0%, 85%);
+  --main-background-color: hsl(0, 0%, 90%);
+}
+
+.html__transition {
+  transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+
 html {
   font-family: Vazirmatn, sans-serif;
+  color: var(--font-color);
 }
 
 body {
   margin: 0;
-  background-color: hsl(0, 0%, 12%);
+  background-color: var(--body-background-color);
   /* There was a problem with english element causing the page to have a horizontal scrollbar */
   overflow-x: hidden;
 }
@@ -34,8 +60,7 @@ body {
 
 .main__wrapper {
   flex: 1;
-  background-color: hsl(0, 0%, 19%);
-  color: hsl(0, 0%, 100%);
+  background-color: var(--main-background-color);
   transition: transform 0.5s ease-out;
   position: relative;
 }
@@ -51,8 +76,7 @@ body {
 }
 
 .personal__wrapper {
-  background-color: hsl(0, 0%, 13%);
-  color: hsl(0, 0%, 100%);
+  background-color: var(--personal-info-background-color);
 }
 
 .personal__wrapper__transition {
@@ -194,12 +218,12 @@ body {
 
 .logo__simaran {
   width: 96px;
-  color: hsl(0, 0%, 100%);
+  color: currentColor;
   position: absolute;
   top: 39px;
 }
 #simaran_path2 {
-  fill: hsl(0, 0%, 19%);
+  fill: var(--main-background-color);
 }
 
 .logo__processmaker,
@@ -237,10 +261,19 @@ body {
   fill: currentColor;
 }
 
+.logo__processmaker path:not(:first-child) {
+  fill: currentColor;
+}
+
 .label__unchecked,
 .label__checked {
   direction: ltr;
 }
 .label__language {
   margin-top: 2px;
+}
+
+.label__unchecked,
+label:has(#languageCheckbox:not(:checked)) .label__language {
+  color: hsl(0, 0%, 49%);
 }
