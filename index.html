@@ -12,12 +12,22 @@
   <body>
     <div class="page__wrapper max-width-wrapper">
       <main class="main__wrapper max-width-wrapper">
-        <h1>تجربه‌های کاری</h1>
-        <div class="career__section">
-          <div class="career__info">
+        <h1 class="main__header__persian"><span>تجربه‌های کاری</span></h1>
+        <h1 class="main__header__english">Work Experiences</h1>
+
+        <div
+          class="career__section"
+          data-start-date="2023-8-23"
+          data-end-date="2025-4-23"
+        >
+          <div class="career__info career__info__farsi">
             <h2>سیماران</h2>
             <p>در این شرکت به عنوان توسعه دهنده Front-end فعالیت کردم.</p>
-            <p>از شهریور 1402 تا اردیبهشت 1404 در این شرکت مشغول بودم.</p>
+            <p>
+              از <span data-start-date-persian></span> تا
+              <span data-end-date-persian></span>
+              در این شرکت مشغول بودم.
+            </p>
             <p>
               بر روی تولید نرم‌افزار حسابداری و انبارداری مشابه محصول شرکت
               همکاران سیستم کار کردم.
@@ -43,11 +53,44 @@
             </div>
           </div>
 
-          <div class="career__timeline">
+          <div class="career__info career__info__english">
+            <h2>Simaran</h2>
+            <p>I worked at this company as a Front-end developer</p>
+            <p>
+              The duration of my employment was from
+              <span data-start-date-english></span> to
+              <span data-end-date-english></span>
+            </p>
+            <p>
+              The company was focused on developing ERP software similar to
+              ERPNext
+            </p>
+            <p>
+              I was resposible for developing and maintaining various features
+              in terms of UI and UX
+            </p>
+
+            <div class="features__used">
+              <div class="svg__wrapper loading logo__antd">
+                <img src="/assets/Antd.svg" />
+              </div>
+              <div class="svg__wrapper loading logo__sass">
+                <img src="/assets/Sass.svg" />
+              </div>
+              <div class="svg__wrapper loading logo__react">
+                <img src="/assets/React.svg" />
+              </div>
+              <div class="svg__wrapper loading logo__react">
+                <img src="/assets/TypeScript.svg" />
+              </div>
+            </div>
+          </div>
+
+          <div class="career__timeline timeline__language__transition">
             <div>
               <div class="timeline__end">
                 <div class="timeline__circle"></div>
-                <p>اردیبهشت 1404</p>
+                <p data-end-date-timeline></p>
               </div>
               <div
                 id="simaran"
@@ -57,18 +100,26 @@
               </div>
               <div class="timeline__begin timeline__begin__animation">
                 <div class="timeline__circle"></div>
-                <p>شهریور 1402</p>
+                <p data-start-date-timeline></p>
               </div>
               <div class="career__timeline__line"></div>
             </div>
           </div>
         </div>
 
-        <div class="career__section">
-          <div class="career__info career__info__jahad">
+        <div
+          data-start-date="2021-7-23"
+          data-end-date="2023-2-23"
+          class="career__section"
+        >
+          <div class="career__info career__info__farsi career__info__jahad">
             <h2>جهاد دانشگاهی شریف</h2>
             <p>در این سازمان به عنوان Full-stack فعالیت کردم</p>
-            <p>از مرداد 1400 تا اسفند 1401 در این سازمان مشغول بودم</p>
+            <p>
+              از <span data-start-date-persian></span> تا
+              <span data-end-date-persian></span>
+              در این سازمان مشغول بودم
+            </p>
             <h3>در دوره‌ی فعالیتم در چهار پروژه مسئولیت و نقش داشته‌ام</h3>
             <ol>
               <li class="career__info__jahad__item">
@@ -124,11 +175,74 @@
             <p>در نتیجه تجربه‌ای از هر کدام از این تکنولوژی‌ها حاصل شد.</p>
           </div>
 
-          <div class="career__timeline">
+          <div class="career__info career__info__english career__info__jahad">
+            <h2>ACECR of Sharif University</h2>
+            <p>I've worked at this organization as a Full-stack developer</p>
+            <p>
+              I've been with this organization from
+              <span data-start-date-english></span> until
+              <span data-end-date-english></span>
+            </p>
+            <h3>In my time there I've been responsible for four projects</h3>
+            <ol>
+              <li class="career__info__jahad__item">
+                Design and Development the Process of Sample Experiment for
+                Metallurgy Department
+              </li>
+              <li class="career__info__jahad__item">
+                Design and Development the Process of Sample Experiment for
+                Civil Defense Department
+              </li>
+              <li class="career__info__jahad__item">
+                Development of Integrated Processes for Central Office of ACECR
+              </li>
+              <li class="career__info__jahad__item">
+                Development and Maintenance of Inner Processes of Sharif ACECR
+              </li>
+            </ol>
+
+            <p>
+              The organization used the software ProcessMaker to develop its own
+              applications
+            </p>
+
+            <div class="features__used">
+              <div
+                id="processmaker"
+                class="svg__wrapper loading logo__processmaker"
+              >
+                <!-- Inserted through JS -->
+              </div>
+            </div>
+
+            <p>ProcessMaker itself made use of the following technologies:</p>
+
+            <div class="features__used">
+              <div class="svg__wrapper loading logo__php">
+                <img src="/assets/Php.svg" />
+              </div>
+              <div id="jquery" class="svg__wrapper loading logo__jquery">
+                <!-- Inserted through JS -->
+              </div>
+              <div class="svg__wrapper loading logo__bootstrap">
+                <img src="/assets/Bootstrap.svg" />
+              </div>
+              <div class="svg__wrapper loading logo__mysql">
+                <img src="/assets/MySQL.svg" />
+              </div>
+            </div>
+
+            <p>
+              In turn some experience was gained in each of the technologies
+              that ProcessMaker was using
+            </p>
+          </div>
+
+          <div class="career__timeline timeline__language__transition">
             <div>
               <div class="timeline__end">
                 <div class="timeline__circle"></div>
-                <p>اسفند 1401</p>
+                <p data-end-date-timeline></p>
               </div>
               <div
                 id="jahad"
@@ -138,7 +252,7 @@
               </div>
               <div class="timeline__begin timeline__begin__animation">
                 <div class="timeline__circle"></div>
-                <p>مرداد 1400</p>
+                <p data-start-date-timeline></p>
               </div>
               <div class="career__timeline__line"></div>
             </div>
@@ -150,7 +264,7 @@
         id="info-farsi"
         class="personal__wrapper max-width-wrapper personal__info__farsi"
       >
-        <div style="position: sticky; top: 16px">
+        <div>
           <p>سلام محسن افشاری هستم</p>
           <ul>
             <li>
@@ -187,15 +301,36 @@
       >
         <div style="position: sticky; top: 16px">
           <p>Hi, I'm Mohsen Afshari</p>
+          <ul>
+            <li><p>I'm a Mid-level Front-end developer</p></li>
+            <li>
+              <p>
+                I have about three and half years of experience on web, most of
+                it involved Front-end but I have done some Back-end stuff too
+              </p>
+            </li>
+            <li>
+              <p>
+                I have bachelor's degree in Information Technology (I.T.) from
+                Islamic Azad University
+              </p>
+            </li>
+            <li>
+              <p>I live in Tehran</p>
+            </li>
+            <li>
+              <p>I was born in 1996</p>
+            </li>
+          </ul>
         </div>
       </section>
 
       <div class="page__controls">
         <div class="page__controls__item">
           <label class="switch">
-            <input type="checkbox" />
+            <input id="languageCheckbox" type="checkbox" />
             <span class="slider round"></span>
-            <span class="label">
+            <span class="label label__language">
               <span class="label__unchecked">Fa</span>
               <span class="label__checked">En</span>
               <span id="language">

@@ -40,6 +40,16 @@ body {
   position: relative;
 }
 
+.main__header__english {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.main__header__transition {
+  transition: transform 0.5s ease-out, opacity 0.25s ease-out;
+}
+
 .personal__wrapper {
   background-color: hsl(0, 0%, 13%);
   color: hsl(0, 0%, 100%);
@@ -54,13 +64,8 @@ body {
   top: 16px;
 }
 
-.personal__wrapper__english {
-  /* Temp */
-  position: absolute;
-  height: 100%;
-  background-color: red;
-  width: 628px;
-  left: calc(-628px + 16px);
+.personal__info__english {
+  direction: ltr;
 }
 
 .career__section {
@@ -71,8 +76,19 @@ body {
   flex: 1;
 }
 
+.career__info__transition {
+  transition: transform 0.5s ease-out, opacity 0.25s ease-out;
+}
+
+.career__info__english {
+  position: absolute;
+  right: 100%;
+  direction: ltr;
+}
+
 .career__timeline {
   position: relative;
+  min-width: 140px;
 }
 
 .career__timeline > div {
@@ -103,6 +119,10 @@ body {
   opacity: 1;
 }
 
+.timeline__language__transition {
+  transition: transform 0.5s ease-out;
+}
+
 .timeline__end,
 .timeline__begin {
   display: flex;
@@ -116,7 +136,6 @@ body {
   height: 16px;
   border: 2px solid currentColor;
   border-radius: 50%;
-  margin-top: 2px;
 }
 
 .features__used {
@@ -204,10 +223,6 @@ body {
   width: 20px;
 }
 
-.career__timeline {
-  min-width: 140px;
-}
-
 .career__info__jahad h3 {
   margin-top: 48px;
 }
@@ -220,4 +235,12 @@ body {
 
 .logo__jquery g g path {
   fill: currentColor;
+}
+
+.label__unchecked,
+.label__checked {
+  direction: ltr;
+}
+.label__language {
+  margin-top: 2px;
 }

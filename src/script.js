@@ -129,36 +129,27 @@ function insertElement(svg, id) {
   const intervalID = setInterval(() => {
     if (isLoaded.current) {
       clearInterval(intervalID);
-      const element = document.querySelector(`#${id}`);
-      if (element === null) {
-        return;
-      }
+      const elements = document.querySelectorAll(`#${id}`);
 
-      element.appendChild(svg);
+      elements.forEach((element, i) => {
+        element.appendChild(i === 0 ? svg : svg.cloneNode(true));
 
-      if (!element.classList.contains("loading")) {
-        return;
-      }
-
-      element.classList.remove("loading");
+        if (element.classList.contains("loading")) {
+          element.classList.remove("loading");
+        }
+      });
     }
   }, 10);
 }
 
-document.documentElement.lang === "fa" ? initialFAPrep() : initialENPrep();
-// initialFAPrep();
-// setTimeout(() => {
-//   console.log("changing");
-//   changeLanguage(document.documentElement.lang === "en" ? "fa" : "en");
-// }, 3000);
-// changeLanguageInterval();
+document.querySelector("#languageCheckbox").addEventListener("change", (e) => {
+  const isEnglish = e.target.checked;
 
-function changeLanguageInterval() {
-  setInterval(() => {
-    console.log("changing");
-    changeLanguage(document.documentElement.lang === "en" ? "fa" : "en");
-  }, 3000);
-}
+  changeLanguage(isEnglish ? "en" : "fa");
+});
+document.querySelector("#languageCheckbox").checked === "en"
+  ? initialENPrep()
+  : initialFAPrep();
 
 // Why not make both the Fa and En elements absolute
 // Because I lose the dynamic sizing of the main element
@@ -179,6 +170,10 @@ function initialFAPrep() {
   document.documentElement.classList.remove("page__lang__en");
   document.documentElement.classList.add("page__lang__fa");
 
+  changeLanguageMain("fa");
+  changeLanguageHeader("fa");
+  changeLanguageDateTimeline("fa");
+
   addTransitionToPersonalWrappers();
 }
 
@@ -197,6 +192,10 @@ function initialENPrep() {
   document.documentElement.classList.remove("page__lang__fa");
   document.documentElement.classList.add("page__lang__en");
 
+  changeLanguageMain("en");
+  changeLanguageHeader("en");
+  changeLanguageDateTimeline("en");
+
   addTransitionToPersonalWrappers();
 }
 
@@ -204,7 +203,6 @@ function addTransitionToPersonalWrappers() {
   setTimeout(() => {
     Array.from(document.querySelectorAll(".personal__wrapper")).forEach(
       (elem) => {
-        console.log(elem);
         elem.classList.add("personal__wrapper__transition");
       }
     );
@@ -212,6 +210,13 @@ function addTransitionToPersonalWrappers() {
 }
 
 function changeLanguage(lang) {
+  changeLanguageOuterLayer(lang);
+  changeLanguageMain(lang);
+  changeLanguageHeader(lang);
+  changeLanguageDateTimeline(lang);
+}
+
+function changeLanguageOuterLayer(lang) {
   const farsiElement = document.querySelector("#info-farsi");
   const englishElement = document.querySelector("#info-english");
   const main = document.querySelector("main");
@@ -237,8 +242,161 @@ function changeLanguage(lang) {
   document.documentElement.lang = lang;
 }
 
-function toggleLanguage() {
-  document.documentElement.lang === "en"
-    ? changeLanguage("fa")
-    : changeLanguage("en");
+function changeLanguageMain(lang) {
+  for (const job of document.querySelectorAll(".career__section")) {
+    const persianInfoSection = job.querySelector(".career__info__farsi");
+    const englishInfoSection = job.querySelector(".career__info__english");
+    const careerTimeline = job.querySelector(".career__timeline");
+
+    if (lang === "en") {
+      persianInfoSection.style.transform = `translateX(${persianInfoSection.offsetWidth}px)`;
+      persianInfoSection.style.opacity = 0;
+      englishInfoSection.style.opacity = 1;
+
+      careerTimeline.style.transform = `translateX(${persianInfoSection.offsetWidth}px)`;
+
+      englishInfoSection.style.transform = `translateX(${
+        englishInfoSection.offsetWidth + 32
+      }px)`;
+    } else if (lang === "fa") {
+      persianInfoSection.style.transform = "translateX(0)";
+      persianInfoSection.style.opacity = 1;
+      englishInfoSection.style.opacity = 0;
+
+      careerTimeline.style.transform = `translateX(0)`;
+
+      englishInfoSection.style.transform = `translateX(0)`;
+    }
+  }
+}
+
+// Same width for english element as persian one
+Array.from(document.querySelectorAll(".career__section")).forEach((job) => {
+  const persianInfoSection = job.querySelector(".career__info__farsi");
+  const englishInfoSection = job.querySelector(".career__info__english");
+
+  englishInfoSection.style.width = persianInfoSection.offsetWidth + "px";
+
+  persianInfoSection.classList.add("career__info__transition");
+  englishInfoSection.classList.add("career__info__transition");
+});
+
+// Substitute start/end date with text
+updateDateTexts();
+
+function updateDateTexts() {
+  Array.from(document.querySelectorAll("[data-start-date]")).forEach(
+    (element) => {
+      const {
+        englishEndDate,
+        englishStartDate,
+        persianEndDate,
+        persianStartDate,
+      } = getDateTexts(element.dataset);
+
+      for (const elem of element.querySelectorAll(
+        "[data-start-date-persian]"
+      )) {
+        elem.append(persianStartDate);
+      }
+
+      for (const elem of element.querySelectorAll("[data-end-date-persian]")) {
+        elem.append(persianEndDate);
+      }
+
+      for (const elem of element.querySelectorAll(
+        "[data-start-date-english]"
+      )) {
+        elem.append(englishStartDate);
+      }
+
+      for (const elem of element.querySelectorAll("[data-end-date-english]")) {
+        elem.append(englishEndDate);
+      }
+    }
+  );
+}
+
+function changeLanguageDateTimeline(lang) {
+  for (const element of document.querySelectorAll("[data-start-date]")) {
+    const { startDate, endDate } = element.dataset;
+
+    const {
+      englishEndDate,
+      englishStartDate,
+      persianEndDate,
+      persianStartDate,
+    } = getDateTexts(element.dataset);
+
+    for (const elem of element.querySelectorAll("[data-start-date-timeline]")) {
+      elem.innerText = lang === "en" ? englishStartDate : persianStartDate;
+    }
+
+    for (const elem of element.querySelectorAll("[data-end-date-timeline]")) {
+      elem.innerText = lang === "en" ? englishEndDate : persianEndDate;
+    }
+  }
+}
+
+function getDateTexts(props) {
+  const { startDate, endDate } = props;
+  const persianStartDate = new Date(startDate)
+    .toLocaleDateString("fa-IR", {
+      year: "numeric",
+      month: "long",
+    })
+    .split(" ")
+    .reverse()
+    .join(" ");
+
+  const persianEndDate = new Date(endDate)
+    .toLocaleDateString("fa-IR", {
+      year: "numeric",
+      month: "long",
+    })
+    .split(" ")
+    .reverse()
+    .join(" ");
+
+  const englishStartDate = new Date(startDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+  });
+
+  const englishEndDate = new Date(endDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+  });
+
+  return { englishStartDate, englishEndDate, persianStartDate, persianEndDate };
+}
+
+// Add transition class to header
+setTimeout(() => {
+  Array.from(
+    document.querySelectorAll(".main__header__persian, .main__header__english")
+  ).forEach((elem) => {
+    if (!elem.classList.contains("main__header__transition")) {
+      elem.classList.add("main__header__transition");
+    }
+  });
+}, 0);
+
+function changeLanguageHeader(lang) {
+  const englishHeader = document.querySelector(".main__header__english");
+  const persianHeader = document.querySelector(".main__header__persian");
+
+  const persianHeaderSize = persianHeader.firstElementChild.offsetWidth;
+
+  if (lang === "en") {
+    englishHeader.style.transform = `translateX(32px)`;
+    persianHeader.style.transform = `translateX(${persianHeaderSize + 16}px)`;
+    englishHeader.style.opacity = 1;
+    persianHeader.style.opacity = 0;
+  } else {
+    englishHeader.style.transform = `translateX(-${englishHeader.offsetWidth}px)`;
+    persianHeader.style.transform = `translateX(0)`;
+    englishHeader.style.opacity = 0;
+    persianHeader.style.opacity = 1;
+  }
 }
