@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" class="dark html__transition">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,7 @@
     <title>محسن افشاری</title>
     <!-- TODO: no github link -->
   </head>
-  <body>
+  <body translate="no">
     <div class="page__wrapper max-width-wrapper">
       <main class="main__wrapper max-width-wrapper">
         <h1 class="main__header__persian"><span>تجربه‌های کاری</span></h1>
@@ -87,18 +87,16 @@
             </div>
           </div>
 
-          <div class="career__timeline timeline__language__transition">
+          <div class="career__timeline">
             <div>
               <div class="timeline__end">
                 <div class="timeline__circle"></div>
                 <p data-end-date-timeline></p>
               </div>
               <div
-                id="simaran"
                 class="svg__wrapper loading logo__simaran timeline__logo"
-              >
-                <!-- Inserted through JS -->
-              </div>
+                data-svg-url="/assets/Simaran.svg"
+              ></div>
               <div class="timeline__begin timeline__begin__animation">
                 <div class="timeline__circle"></div>
                 <p data-start-date-timeline></p>
@@ -147,11 +145,9 @@
 
             <div class="features__used">
               <div
-                id="processmaker"
                 class="svg__wrapper loading logo__processmaker"
-              >
-                <!-- Inserted through JS -->
-              </div>
+                data-svg-url="/assets/Processmaker.svg"
+              ></div>
             </div>
 
             <p>
@@ -162,9 +158,10 @@
               <div class="svg__wrapper loading logo__php">
                 <img src="/assets/Php.svg" />
               </div>
-              <div id="jquery" class="svg__wrapper loading logo__jquery">
-                <!-- Inserted through JS -->
-              </div>
+              <div
+                class="svg__wrapper loading logo__jquery"
+                data-svg-url="/assets/Jquery.svg"
+              ></div>
               <div class="svg__wrapper loading logo__bootstrap">
                 <img src="/assets/Bootstrap.svg" />
               </div>
@@ -209,11 +206,9 @@
 
             <div class="features__used">
               <div
-                id="processmaker"
                 class="svg__wrapper loading logo__processmaker"
-              >
-                <!-- Inserted through JS -->
-              </div>
+                data-svg-url="/assets/Processmaker.svg"
+              ></div>
             </div>
 
             <p>ProcessMaker itself made use of the following technologies:</p>
@@ -222,9 +217,10 @@
               <div class="svg__wrapper loading logo__php">
                 <img src="/assets/Php.svg" />
               </div>
-              <div id="jquery" class="svg__wrapper loading logo__jquery">
-                <!-- Inserted through JS -->
-              </div>
+              <div
+                class="svg__wrapper loading logo__jquery"
+                data-svg-url="/assets/Jquery.svg"
+              ></div>
               <div class="svg__wrapper loading logo__bootstrap">
                 <img src="/assets/Bootstrap.svg" />
               </div>
@@ -239,18 +235,16 @@
             </p>
           </div>
 
-          <div class="career__timeline timeline__language__transition">
+          <div class="career__timeline">
             <div>
               <div class="timeline__end">
                 <div class="timeline__circle"></div>
                 <p data-end-date-timeline></p>
               </div>
               <div
-                id="jahad"
                 class="svg__wrapper loading logo__jahad timeline__logo"
-              >
-                <!-- Inserted through JS -->
-              </div>
+                data-svg-url="/assets/Jahad.svg"
+              ></div>
               <div class="timeline__begin timeline__begin__animation">
                 <div class="timeline__circle"></div>
                 <p data-start-date-timeline></p>
@@ -325,40 +319,35 @@
           </ul>
         </div>
       </section>
+    </div>
+    <footer class="page__footer"></footer>
 
-      <div class="page__controls">
-        <div class="page__controls__item">
-          <label class="switch">
-            <input id="languageCheckbox" type="checkbox" />
-            <span class="slider round"></span>
-            <span class="label label__language">
-              <span class="label__unchecked">Fa</span>
-              <span class="label__checked">En</span>
-              <span id="language">
-                <!-- Inserted through JS -->
-              </span></span
-            >
-          </label>
-        </div>
+    <div class="page__controls">
+      <div class="page__controls__item">
+        <label class="switch">
+          <input id="languageCheckbox" type="checkbox" />
+          <span class="slider round"></span>
+          <span class="label label__language">
+            <span class="label__unchecked">Fa</span>
+            <span class="label__checked">En</span>
+            <span data-svg-url="/assets/Language.svg"> </span
+          ></span>
+        </label>
+      </div>
 
-        <div class="page__controls__item">
-          <label id="lightModeCheckbox" class="switch">
-            <input type="checkbox" />
-            <span class="slider round"></span>
-            <span class="label">
-              <span class="label__unchecked light__control">
-                <span id="dark">
-                  <!-- Inserted through JS -->
-                </span></span
-              >
-              <span class="label__checked light__control">
-                <span id="light">
-                  <!-- Inserted through JS -->
-                </span></span
-              >
-            </span>
-          </label>
-        </div>
+      <div class="page__controls__item">
+        <label class="switch">
+          <input id="lightModeCheckbox" type="checkbox" />
+          <span class="slider round"></span>
+          <span class="label">
+            <span class="label__unchecked light__control">
+              <span data-svg-url="/assets/Darkmode.svg"> </span
+            ></span>
+            <span class="label__checked light__control">
+              <span data-svg-url="/assets/Lightmode.svg"> </span
+            ></span>
+          </span>
+        </label>
       </div>
     </div>
 
