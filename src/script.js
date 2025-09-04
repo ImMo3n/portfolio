@@ -1,10 +1,7 @@
-const isLoaded = { current: false };
 let windowResizeTimeoutID;
 
 document.addEventListener("DOMContentLoaded", () => {
-  isLoaded.current = true;
-
-  initializeOnFontLoaded();
+  initializeOnFontLoaded(document.documentElement.lang);
 
   // Determine what color scheme user wants
   // Listener on system preference
@@ -28,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   imgLoaderListener();
 
   // Animation for line connecting two of the circles in the timeline
-  animateTimeLines();
+  animateTimeLines(document.documentElement.lang);
 
   // Resize listener for correction for lines connecting two of the circles in the timeline
   initilizeWindowResizeListener();
@@ -66,23 +63,8 @@ function changeColorScheme(isDarkMode) {
   }
 }
 
-function initializeOnFontLoaded() {
+function initializeOnFontLoaded(lang) {
   document.fonts.onloadingdone = () => {
-    for (const element of document.querySelectorAll(".career__timeline")) {
-      animateCareerTimeline(element);
-
-      const beginElement = document.querySelector(".timeline__begin");
-
-      // after the initial animation I need to remove the transition class so that it stops the transition when window resizes
-      beginElement.addEventListener(
-        "transitionend",
-        () => {
-          beginElement.classList.remove("timeline__begin__animation");
-        },
-        { once: true }
-      );
-    }
-
     // The sizes of english elements might be wrong and need recalculations
     handleEnglishAndPersianElementSizes(document.documentElement.lang);
 
@@ -91,26 +73,43 @@ function initializeOnFontLoaded() {
   };
 }
 
-function animateTimeLines() {
+function animateTimeLines(lang) {
   for (const element of document.querySelectorAll(".career__timeline")) {
-    animateCareerTimeline(element);
+    animateCareerTimeline(element, lang);
   }
 }
 
-function animateCareerTimeline(element) {
-  const child = element.children[0];
+function animateCareerTimeline(element, lang) {
+  const relevantHeightElement = element
+    .closest(".career__section")
+    .querySelector(
+      lang === "en" ? ".career__info__english" : ".career__info__farsi"
+    );
 
-  const tranlateValue =
-    element.clientHeight -
-    child.querySelector(".timeline__end").clientHeight -
-    child.querySelector(".timeline__begin").clientHeight;
+  const timelineEnd = element.querySelector(".timeline__end");
+  const timelineBegin = element.querySelector(".timeline__begin");
+
+  const height = parseFloat(
+    window.getComputedStyle(relevantHeightElement).height
+  );
+
+  const child = element.firstElementChild;
 
   if (!child.classList.contains("career__timeline__line__animate")) {
-    child.classList.add("career__timeline__line__animate");
+    timelineBegin.addEventListener(
+      "transitionend",
+      () => {
+        child.classList.add("career__timeline__line__animate");
+      },
+      { once: true }
+    );
   }
 
-  const beginElement = child.querySelector(".timeline__begin");
-  beginElement.style.transform = `translateY(${tranlateValue}px)`;
+  child.style.height = `${height}px`;
+
+  timelineBegin.style.transform = `translateY(${
+    height - timelineEnd.clientHeight - timelineBegin.clientHeight
+  }px)`;
 }
 
 function imgLoaderListener() {
@@ -186,10 +185,6 @@ function initilizeWindowResizeListener() {
       clearTimeout(windowResizeTimeoutID);
     }
 
-    for (const element of document.querySelectorAll(".career__timeline")) {
-      animateCareerTimeline(element);
-    }
-
     handleEnglishAndPersianElementSizes(document.documentElement.lang);
 
     windowResizeTimeoutID = setTimeout(() => {
@@ -207,33 +202,41 @@ function initializeSwitches() {
     const isEnglish = e.target.checked;
 
     changeLanguage(isEnglish ? "en" : "fa");
+    updateAriaForSwitches();
   });
 
   lightModeCheckbox.addEventListener("change", (e) => {
     const isDarkMode = !e.target.checked;
 
     changeColorScheme(isDarkMode);
+    updateAriaForSwitches();
   });
 
   languageCheckbox.checked = document.documentElement.lang === "en";
+  languageCheckbox.ariaLabel = "Language toggle";
 
   lightModeCheckbox.checked =
     document.documentElement.classList.contains("light");
+  lightModeCheckbox.ariaLabel = "Color scheme toggle";
+
+  updateAriaForSwitches();
+}
+
+function updateAriaForSwitches() {
+  const languageCheckbox = document.querySelector("#languageCheckbox");
+  const lightModeCheckbox = document.querySelector("#lightModeCheckbox");
+
+  languageCheckbox.ariaPressed =
+    document.documentElement.lang === "en" ? "English" : "Persian";
+
+  lightModeCheckbox.ariaPressed = document.documentElement.classList.contains(
+    "light"
+  )
+    ? "Light mode"
+    : "Dark mode";
 }
 
 function initiateLangauage(lang) {
-  const farsiElement = document.querySelector("#info-farsi");
-  const englishElement = document.querySelector("#info-english");
-
-  // Why not make both the Fa and En elements absolute
-  // Because I lose the dynamic sizing of the main element
-  // I want Fa to be not absolute so it can take some space from main element
-  englishElement.style.position = "absolute";
-  englishElement.style.height = "100%";
-  englishElement.style.opacity = 0;
-  englishElement.style.width = `${farsiElement.offsetWidth}px`;
-  englishElement.style.left = `-${farsiElement.offsetWidth - 16}px`; // take out one margin
-
   changeLanguageMain(lang);
   changeLanguageHeader(lang);
   changeLanguageDateTimeline(lang);
@@ -245,6 +248,8 @@ function changeLanguage(lang) {
   changeLanguageHeader(lang);
   changeLanguageDateTimeline(lang);
   changeLanguageTitle(lang);
+
+  animateTimeLines(lang);
 }
 
 function changeLanguageOuterLayer(lang) {
@@ -289,7 +294,7 @@ function changeLanguageMain(lang) {
       careerTimeline.style.transform = `translateX(${persianInfoSection.offsetWidth}px)`;
 
       englishInfoSection.style.transform = `translateX(${
-        englishInfoSection.offsetWidth + 32
+        englishInfoSection.offsetWidth + 16
       }px)`;
     } else if (lang === "fa") {
       persianInfoSection.style.transform = "translateX(0)";
@@ -303,122 +308,78 @@ function changeLanguageMain(lang) {
   }
 }
 
-function getMainHeight() {
+function getMainHeight(lang) {
   const main = document.querySelector("main");
 
-  const persianHeaderElement = main.querySelector(".main__header__persian");
-  const englishHeaderElement = main.querySelector(".main__header__english");
-
-  const persianHeaderComputedStyles =
-    window.getComputedStyle(persianHeaderElement);
-  const englishHeaderComputedStyles =
-    window.getComputedStyle(englishHeaderElement);
-
-  const headerMarginBottom = Math.max(
-    parseFloat(persianHeaderComputedStyles.marginBottom),
-    parseFloat(englishHeaderComputedStyles.marginBottom)
+  const headerElement = main.querySelector(
+    lang === "en" ? ".main__header__english" : ".main__header__persian"
   );
+  const headerComputedStyles = window.getComputedStyle(headerElement);
 
   // header height
-  const headerHeight = Math.max(
-    persianHeaderElement.offsetHeight +
-      parseFloat(persianHeaderComputedStyles.marginTop),
-    englishHeaderElement.offsetHeight +
-      parseFloat(englishHeaderComputedStyles.marginTop)
-  );
+  const headerHeight =
+    headerElement.offsetHeight + parseFloat(headerComputedStyles.marginTop);
 
   // common margin between header and first job
+  const headerMarginBottom = parseFloat(headerComputedStyles.marginBottom);
   const firstCareerSection = main.querySelector(".career__section");
   const firstCareerSectionStyles = window.getComputedStyle(firstCareerSection);
   const headerAndFirstJobCommonMargin = Math.max(
     headerMarginBottom,
-    parseFloat(firstCareerSectionStyles.marginBottom)
+    parseFloat(firstCareerSectionStyles.marginTop)
   );
 
   // Sum of all jobs heights
   const jobs = Array.from(document.querySelectorAll(".career__section"));
   const sumOfJobsHeight = jobs.reduce((result, job, i) => {
-    const farsiElement = job.querySelector(".career__info__farsi");
-    const farsiElementStyles = getComputedStyle(
-      farsiElement.closest(".career__section")
+    const element = job.querySelector(
+      lang === "en" ? ".career__info__english" : ".career__info__farsi"
     );
-
-    const englishElement = job.querySelector(".career__info__english");
-    const englishElementStyles = getComputedStyle(
-      englishElement.closest(".career__section")
-    );
-
-    const farsiEnglishElementHeight = Math.max(
-      farsiElement.offsetHeight,
-      englishElement.offsetHeight
-    );
+    const jobStyles = window.getComputedStyle(element);
+    const jobHeight = element.offsetHeight;
 
     const nextJob = jobs.at(i + 1);
     let commonMargin = 0;
     if (nextJob !== undefined) {
-      const nextJobFarsiElement = nextJob
-        .querySelector(".career__info__farsi")
-        .closest(".career__section");
-
-      const nextJobEnglishElement = nextJob
-        .querySelector(".career__info__english")
-        .closest(".career__section");
-
-      const nextJobFarsiElementStyles =
-        window.getComputedStyle(nextJobFarsiElement);
-      const nextJobEnglishElementStyles = window.getComputedStyle(
-        nextJobEnglishElement
-      );
+      const nextJobElementStyles = window.getComputedStyle(nextJob);
 
       commonMargin = Math.max(
-        Math.max(
-          parseFloat(nextJobFarsiElementStyles.marginTop),
-          parseFloat(farsiElementStyles.marginBottom)
-        ),
-        Math.max(
-          parseFloat(nextJobEnglishElementStyles.marginTop),
-          parseFloat(englishElementStyles.marginBottom)
-        )
+        parseFloat(jobStyles.marginBottom),
+        parseFloat(nextJobElementStyles.marginTop)
       );
     }
 
-    return result + farsiEnglishElementHeight + commonMargin;
+    return result + jobHeight + commonMargin;
   }, 0);
 
-  return headerHeight + headerAndFirstJobCommonMargin + sumOfJobsHeight + 128;
+  return headerHeight + headerAndFirstJobCommonMargin + sumOfJobsHeight + 40;
 }
 
 function updateDateTexts() {
-  Array.from(document.querySelectorAll("[data-start-date]")).forEach(
-    (element) => {
-      const {
-        englishEndDate,
-        englishStartDate,
-        persianEndDate,
-        persianStartDate,
-      } = getDateTexts(element.dataset);
+  for (const element of document.querySelectorAll("[data-start-date]")) {
+    const {
+      englishEndDate,
+      englishStartDate,
+      persianEndDate,
+      persianStartDate,
+    } = getDateTexts(element.dataset);
 
-      for (const elem of element.querySelectorAll(
-        "[data-start-date-persian]"
-      )) {
-        elem.append(persianStartDate);
-      }
-
-      for (const elem of element.querySelectorAll("[data-end-date-persian]")) {
-        elem.append(persianEndDate);
-      }
-
-      for (const elem of element.querySelectorAll(
-        "[data-start-date-english]"
-      )) {
-        elem.append(englishStartDate);
-      }
-
-      for (const elem of element.querySelectorAll("[data-end-date-english]")) {
-        elem.append(englishEndDate);
-      }
+    for (const elem of element.querySelectorAll("[data-start-date-persian]")) {
+      elem.append(persianStartDate);
     }
-  );
+
+    for (const elem of element.querySelectorAll("[data-end-date-persian]")) {
+      elem.append(persianEndDate);
+    }
+
+    for (const elem of element.querySelectorAll("[data-start-date-english]")) {
+      elem.append(englishStartDate);
+    }
+
+    for (const elem of element.querySelectorAll("[data-end-date-english]")) {
+      elem.append(englishEndDate);
+    }
+  }
 }
 
 function changeLanguageDateTimeline(lang) {
@@ -482,7 +443,7 @@ function changeLanguageHeader(lang) {
   const persianHeaderSize = persianHeader.firstElementChild.offsetWidth;
 
   if (lang === "en") {
-    englishHeader.style.transform = `translateX(32px)`;
+    englishHeader.style.transform = `translateX(16px)`;
     persianHeader.style.transform = `translateX(${persianHeaderSize + 16}px)`;
     englishHeader.style.opacity = 1;
     persianHeader.style.opacity = 0;
@@ -520,18 +481,28 @@ function addTransitionClasses() {
   for (const elem of document.querySelectorAll(".career__timeline")) {
     elem.classList.add("timeline__language__transition");
   }
+
+  for (const elem of document.querySelectorAll(".timeline__begin")) {
+    elem.classList.add("timeline__begin__animation");
+  }
+
+  for (const elem of document.querySelectorAll(".page__controls")) {
+    elem.classList.add("page__control__transition");
+  }
 }
 
 function removeTransitionClasses() {
   for (const elem of document.querySelectorAll(
-    ".personal__wrapper__transition, .career__info__transition, .main__header__transition, .main__wrapper__transition, .timeline__language__transition"
+    ".personal__wrapper__transition, .career__info__transition, .main__header__transition, .main__wrapper__transition, .timeline__language__transition, .timeline__begin__animation, .page__control__transition"
   )) {
     elem.classList.remove(
       "personal__wrapper__transition",
       "career__info__transition",
       "main__header__transition",
       "main__wrapper__transition",
-      "timeline__language__transition"
+      "timeline__language__transition",
+      "timeline__begin__animation",
+      "page__control__transition"
     );
   }
 }
@@ -539,16 +510,24 @@ function removeTransitionClasses() {
 function handleEnglishAndPersianElementSizes(lang) {
   const infoFarsi = document.querySelector("#info-farsi");
   const infoEnglish = document.querySelector("#info-english");
+
   infoEnglish.style.width = `${infoFarsi.offsetWidth}px`;
-  infoEnglish.style.left = `-${infoFarsi.offsetWidth - 16}px`; // take out one margin
+  infoEnglish.style.left = `-${infoFarsi.offsetWidth}px`;
 
-  changeLanguage(lang);
+  animateTimeLines(document.documentElement.lang);
 
-  const mainHeight = getMainHeight();
-  console.log(mainHeight);
-
+  const mainHeight = getMaxMainHeight();
   const main = document.querySelector("main");
   main.style.minHeight = mainHeight + "px";
+
+  changeLanguage(lang);
+}
+
+function getMaxMainHeight() {
+  const enMainHeight = getMainHeight("en");
+  const faMainHeight = getMainHeight("fa");
+
+  return Math.max(enMainHeight, faMainHeight);
 }
 
 function changeLanguageTitle(lang) {

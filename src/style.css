@@ -20,9 +20,10 @@
 }
 
 html.dark {
-  --font-color: hsl(0, 0%, 100%);
+  --font-color: hsl(0, 0%, 93%);
   --body-background-color: hsl(0, 0%, 12%);
   --personal-info-background-color: hsl(0, 0%, 15%);
+  --personal-info-background-color-with-alpha: hsl(0, 0%, 15%, 0.85);
   --main-background-color: hsl(0, 0%, 19%);
   --page-controls-background-color: hsl(0, 0%, 19%, 0.7);
 }
@@ -31,8 +32,17 @@ html.light {
   --font-color: hsl(0, 0%, 0%);
   --body-background-color: hsl(0, 0%, 100%);
   --personal-info-background-color: hsl(0, 0%, 85%);
+  --personal-info-background-color-with-alpha: rgba(204, 204, 204, 0.55);
   --main-background-color: hsl(0, 0%, 90%);
   --page-controls-background-color: hsl(0, 0%, 90%, 0.7);
+}
+
+.dark body {
+  background: url("../assets/background-dark.png");
+}
+
+.light body {
+  background: url("../assets/background-light.png");
 }
 
 .color__transition {
@@ -73,6 +83,10 @@ body {
   gap: 1rem;
 }
 
+.color__transition .page__control__transition {
+  transition: background-color 0.25s ease-in 0.25s;
+}
+
 .main__wrapper {
   flex-grow: 1;
   flex-shrink: 1;
@@ -85,7 +99,7 @@ body {
 }
 
 .color__transition .main__wrapper__transition {
-  transition: transform 0.5s ease-out, background-color 0.25s ease-in 0.25s;
+  transition: transform 0.5s ease-out, background-color 0.25s ease-in 0.125s;
 }
 
 .main__header__english {
@@ -99,9 +113,15 @@ body {
 }
 
 .personal__wrapper {
-  background-color: var(--personal-info-background-color);
+  background-color: var(--personal-info-background-color-with-alpha);
   flex-grow: 0;
   flex-shrink: 2;
+}
+
+.personal__info__english {
+  position: absolute;
+  min-height: 100%;
+  opacity: 0;
 }
 
 .personal__wrapper__transition {
@@ -110,7 +130,7 @@ body {
 
 .color__transition .personal__wrapper__transition {
   transition: transform 0.5s ease-out, opacity 0.25s ease-out,
-    background-color 0.25s ease-in 0.125s;
+    background-color 0.25s ease-in;
 }
 
 .personal__wrapper > div {
@@ -129,6 +149,7 @@ body {
 }
 .career__info {
   flex: 1;
+  height: fit-content;
 }
 
 .career__info__transition {
@@ -139,6 +160,7 @@ body {
   position: absolute;
   right: 100%;
   direction: ltr;
+  padding-inline-end: 16px;
 }
 
 .career__timeline {
@@ -151,7 +173,6 @@ body {
 }
 .career__timeline__line {
   transition: opacity 0.25s ease-in;
-  transition-delay: 1s;
   content: "";
   position: absolute;
   right: 8px;
@@ -164,10 +185,6 @@ body {
 
 .timeline__begin__animation {
   transition: transform 1s ease-out;
-}
-
-.career__timeline__line__animate {
-  height: 100%;
 }
 
 .career__timeline__line__animate .career__timeline__line {
@@ -293,15 +310,61 @@ label:has(#languageCheckbox:not(:checked)) .label__language {
   color: hsl(0, 0%, 49%);
 }
 
-.page__footer {
-  background-color: var(--main-background-color);
-}
-
 @keyframes pulse {
   from {
     background-color: gray;
   }
   to {
     background-color: lightgray;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .page__wrapper {
+    flex-direction: column;
+  }
+
+  .main__wrapper {
+    transform: unset !important;
+  }
+
+  .personal__wrapper > div {
+    position: static;
+  }
+
+  .max-width-wrapper {
+    margin: 0;
+  }
+
+  .personal__wrapper {
+    order: 1;
+  }
+
+  .main__wrapper {
+    order: 2;
+  }
+
+  .page__controls {
+    position: sticky;
+    flex-direction: row;
+    bottom: 0;
+    right: 0;
+    padding-block: 16px;
+    background-color: var(--personal-info-background-color-with-alpha);
+  }
+
+  /* Sorry for the mess but I have to remove the background color from the equation to display background colors properly */
+  /* What happened was that when switching from farsi to english the body background color is shown between transition */
+  /* To fix the issue I switch the body background color to the color of what personal info is */
+  /* It gives the illusion that transform translate is happening smoothly */
+  .color__transition body {
+    transition: unset;
+    background: var(--personal-info-background-color) !important;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .career__timeline {
+    display: none;
   }
 }
