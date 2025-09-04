@@ -54,11 +54,11 @@ html.light {
 }
 
 .dark body {
-  background: url("/background-dark.png");
+  background: url("/assets/background-dark.png");
 }
 
 .light body {
-  background: url("/background-light.png");
+  background: url("/assets/background-light.png");
 }
 
 .color__transition {
