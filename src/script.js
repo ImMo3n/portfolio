@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeColorScheme();
 
   // initialize the language settings
-  initiateLangauage(document.documentElement.lang);
+  initiateLangauage();
 
   // update switches for english/persian and light/dark mode
   // And define change listeners on them
@@ -32,9 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initializeColorScheme() {
-  const isDarkMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const savedPreference = getColorSchemeFromLocalStorage();
+
+  const isDarkMode = savedPreference
+    ? savedPreference === "dark"
+    : window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   changeColorScheme(isDarkMode);
 
@@ -53,6 +56,14 @@ function initializeColorScheme() {
     });
 }
 
+function getColorSchemeFromLocalStorage() {
+  return localStorage.getItem("colorScheme");
+}
+
+function setColorSchemeToLocalStorage(colorScheme) {
+  localStorage.setItem("colorScheme", colorScheme);
+}
+
 function changeColorScheme(isDarkMode) {
   if (isDarkMode) {
     document.documentElement.classList.remove("light");
@@ -61,6 +72,8 @@ function changeColorScheme(isDarkMode) {
     document.documentElement.classList.remove("dark");
     document.documentElement.classList.add("light");
   }
+
+  setColorSchemeToLocalStorage(isDarkMode ? "dark" : "light");
 }
 
 function initializeOnFontLoaded(lang) {
@@ -236,10 +249,26 @@ function updateAriaForSwitches() {
     : "Dark mode";
 }
 
-function initiateLangauage(lang) {
+function initiateLangauage() {
+  const languagePreference = getLangugageFromLocalStorage();
+
+  if (languagePreference) {
+    document.documentElement.lang = languagePreference;
+  }
+
+  const lang = document.documentElement.lang;
+
   changeLanguageMain(lang);
   changeLanguageHeader(lang);
   changeLanguageDateTimeline(lang);
+}
+
+function getLangugageFromLocalStorage() {
+  return localStorage.getItem("language");
+}
+
+function setLanguageToLocalStorage(lang) {
+  localStorage.setItem("language", lang);
 }
 
 function changeLanguage(lang) {
@@ -250,6 +279,8 @@ function changeLanguage(lang) {
   changeLanguageTitle(lang);
 
   animateTimeLines(lang);
+
+  setLanguageToLocalStorage(lang);
 }
 
 function changeLanguageOuterLayer(lang) {
