@@ -53,14 +53,6 @@ html.light {
   --hover-info-border-color: rgb(177, 177, 177);
 }
 
-.dark body {
-  background: url("/assets/background-dark.png");
-}
-
-.light body {
-  background: url("/assets/background-light.png");
-}
-
 .color__transition {
   transition: color 0.5s ease-in-out, background-color 0.5s ease-in;
 }

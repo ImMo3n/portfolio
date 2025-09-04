@@ -1,10 +1,10 @@
 let windowResizeTimeoutID;
+const darkModeImageURL = { current: null };
+const lightModeImageURL = { current: null };
 
 const YEAR = 365 * 24 * 60 * 60 * 1000;
 
 document.addEventListener("DOMContentLoaded", () => {
-  initializeOnFontLoaded(document.documentElement.lang);
-
   // Determine what color scheme user wants
   // Listener on system preference
   // Adds transition class
@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // initialize the language settings
   initiateLangauage();
+
+  initializeOnFontLoaded(document.documentElement.lang);
 
   // update switches for english/persian and light/dark mode
   // And define change listeners on them
@@ -37,6 +39,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initializeColorScheme() {
+  fetchImage("./assets/background-dark.png").then((img) => {
+    darkModeImageURL.current = URL.createObjectURL(img);
+
+    const isDarkMode = document.documentElement.classList.contains("dark");
+    if (isDarkMode) {
+      document.body.style.background = `url(${darkModeImageURL.current})`;
+    }
+  });
+
+  fetchImage("./assets/background-light.png").then((img) => {
+    lightModeImageURL.current = URL.createObjectURL(img);
+
+    const isDarkMode = document.documentElement.classList.contains("dark");
+    if (!isDarkMode) {
+      document.body.style.background = `url(${lightModeImageURL.current})`;
+    }
+  });
+
   const savedPreference = getColorSchemeFromLocalStorage();
 
   const isDarkMode = savedPreference
@@ -61,6 +81,19 @@ function initializeColorScheme() {
     });
 }
 
+function setBackgroundImage(isDarkMode) {
+  if (isDarkMode && darkModeImageURL.current) {
+    document.body.style.background = `url(${darkModeImageURL.current})`;
+  } else if (!isDarkMode && lightModeImageURL.current) {
+    document.body.style.background = `url(${lightModeImageURL.current})`;
+  }
+}
+
+async function fetchImage(url) {
+  const response = await fetch(url);
+  return response.blob();
+}
+
 function getColorSchemeFromLocalStorage() {
   return localStorage.getItem("colorScheme");
 }
@@ -79,6 +112,8 @@ function changeColorScheme(isDarkMode) {
   }
 
   setColorSchemeToLocalStorage(isDarkMode ? "dark" : "light");
+
+  setBackgroundImage(isDarkMode);
 }
 
 function initializeOnFontLoaded(lang) {
