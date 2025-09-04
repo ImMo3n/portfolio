@@ -1,14 +1,24 @@
 :root {
-  --font-color: hsl(0, 0%, 100%);
-  --body-background-color: hsl(0, 0%, 100%);
-  --personal-info-background-color: hsl(0, 0%, 100%);
-  --main-background-color: hsl(0, 0%, 100%);
+  --font-color: white;
+  --body-background-color: white;
+  --personal-info-background-color: white;
+  --personal-info-background-color-with-alpha: white;
+  --main-background-color: white;
+  --page-controls-background-color: white;
+
+  --theme-color: white;
+  --hover-background-color: white;
 }
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
 }
 
 .max-width-wrapper {
@@ -26,6 +36,9 @@ html.dark {
   --personal-info-background-color-with-alpha: hsl(0, 0%, 15%, 0.85);
   --main-background-color: hsl(0, 0%, 19%);
   --page-controls-background-color: hsl(0, 0%, 19%, 0.7);
+  --theme-color: rgb(88, 203, 235);
+  --hover-info-background-color: hsl(0, 0%, 15%, 0.95);
+  --hover-info-border-color: hsl(0, 0%, 25%, 1);
 }
 
 html.light {
@@ -35,6 +48,9 @@ html.light {
   --personal-info-background-color-with-alpha: rgba(204, 204, 204, 0.55);
   --main-background-color: hsl(0, 0%, 90%);
   --page-controls-background-color: hsl(0, 0%, 90%, 0.7);
+  --theme-color: rgb(88, 203, 235);
+  --hover-info-background-color: rgba(215, 215, 215, 0.95);
+  --hover-info-border-color: rgb(177, 177, 177);
 }
 
 .dark body {
@@ -255,7 +271,7 @@ body {
 }
 #simaran_path2 {
   fill: var(--main-background-color);
-  transition: fill 0.25s ease-in 0.25s;
+  transition: fill 0.25s ease-in 0.125s;
 }
 
 .logo__processmaker,
@@ -308,6 +324,13 @@ body {
 .label__unchecked,
 label:has(#languageCheckbox:not(:checked)) .label__language {
   color: hsl(0, 0%, 49%);
+}
+
+.timeline__logo__link__transition {
+  transition: color 0.5s ease-out;
+}
+.timeline__logo__link:hover {
+  color: var(--theme-color);
 }
 
 @keyframes pulse {
@@ -367,4 +390,25 @@ label:has(#languageCheckbox:not(:checked)) .label__language {
   .career__timeline {
     display: none;
   }
+}
+
+.page__item__info {
+  position: fixed;
+  padding-inline: 8px;
+  padding-top: 16px;
+  padding-bottom: 12px;
+  background-color: var(--hover-info-background-color);
+  border-radius: 5px;
+  line-height: 0;
+  border: 1px solid var(--hover-info-border-color);
+  font-size: 0.75rem;
+}
+
+.page__item__info__span {
+  cursor: default;
+  border-bottom: 1px solid var(--hover-info-border-color);
+}
+
+html[lang="en"] .page__item__info {
+  direction: ltr;
 }

@@ -1,5 +1,7 @@
 let windowResizeTimeoutID;
 
+const YEAR = 365 * 24 * 60 * 60 * 1000;
+
 document.addEventListener("DOMContentLoaded", () => {
   initializeOnFontLoaded(document.documentElement.lang);
 
@@ -29,6 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Resize listener for correction for lines connecting two of the circles in the timeline
   initilizeWindowResizeListener();
+
+  // Populate hover elements with relevant content and add event listener on mouseenter
+  initializeHoverInfoElements();
 });
 
 function initializeColorScheme() {
@@ -277,10 +282,38 @@ function changeLanguage(lang) {
   changeLanguageHeader(lang);
   changeLanguageDateTimeline(lang);
   changeLanguageTitle(lang);
+  changeTimelineHoverTexts(lang);
+  changeBirthdayTexts(lang);
 
   animateTimeLines(lang);
 
   setLanguageToLocalStorage(lang);
+}
+
+function changeTimelineHoverTexts(lang) {
+  for (const elem of document.querySelectorAll(
+    ".career__timeline[data-hover-info]"
+  )) {
+    const { startDate, endDate } = elem.closest(".career__section").dataset;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const yearsAndMonths = ((end.getTime() - start.getTime()) / YEAR).toFixed(
+      1
+    ); // output should be like => 1.6 - 1.7
+
+    const [year, month] = (
+      lang === "en" ? yearsAndMonths : getPersianNumbers(yearsAndMonths)
+    ).split(".");
+
+    elem.dataset.hoverInfo =
+      lang === "en"
+        ? ` ${year} ${year === "1" ? "year" : "years"} and ${month} ${
+            month === "1" ? "month" : "months"
+          }`
+        : `${year} سال و ${month} ماه`;
+  }
 }
 
 function changeLanguageOuterLayer(lang) {
@@ -567,4 +600,48 @@ function changeLanguageTitle(lang) {
   } else {
     document.title = "Mohsen Afshari";
   }
+}
+
+function initializeHoverInfoElements() {
+  const infoElement = document.querySelector(".page__item__info");
+  infoElement.hidden = true;
+
+  document.addEventListener("mousemove", (e) => {
+    e.clientX;
+    e.clientY;
+
+    infoElement.style.top = e.clientY + 20 + "px";
+    infoElement.style.left = e.clientX + 10 + "px";
+  });
+
+  for (const element of document.querySelectorAll("[data-hover-info]")) {
+    element.addEventListener("mouseenter", (e) => {
+      const text = element.dataset.hoverInfo;
+
+      infoElement.hidden = false;
+      infoElement.innerText = text;
+    });
+
+    element.addEventListener("mouseleave", (e) => {
+      infoElement.hidden = true;
+    });
+  }
+}
+
+function changeBirthdayTexts(lang) {
+  for (const element of document.querySelectorAll("[data-birthday]")) {
+    const birthday = new Date(element.dataset.birthday);
+    const now = Date.now();
+
+    const difference = Math.trunc((now - birthday) / YEAR);
+
+    element.dataset.hoverInfo =
+      lang === "en"
+        ? `${difference} years old`
+        : `${getPersianNumbers(difference.toString())} ساله هستم`;
+  }
+}
+
+function getPersianNumbers(xxx) {
+  return xxx.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
 }

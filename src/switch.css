@@ -37,11 +37,11 @@
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--theme-color);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--theme-color);
 }
 
 input:checked + .slider:before {
@@ -88,8 +88,6 @@ input:checked + .slider:before {
 .switch:has(input:not(:checked)) .label {
   transform: translate(100%, -50%);
 }
-/* input:checked .label {
-} */
 
 .light__control {
   font-size: 8px;
