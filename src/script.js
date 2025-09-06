@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeColorScheme();
 
   // initialize the language settings
-  initiateLangauage();
+  const lang = initiateLangauage();
 
-  initializeOnFontLoaded(document.documentElement.lang);
+  initializeOnFontLoaded(lang);
 
   // update switches for english/persian and light/dark mode
   // And define change listeners on them
@@ -29,13 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
   imgLoaderListener();
 
   // Animation for line connecting two of the circles in the timeline
-  animateTimeLines(document.documentElement.lang);
+  animateTimeLines(lang);
 
   // Resize listener for correction for lines connecting two of the circles in the timeline
   initilizeWindowResizeListener();
 
   // Populate hover elements with relevant content and add event listener on mouseenter
   initializeHoverInfoElements();
+
+  handleEnglishAndPersianElementSizes(lang);
 });
 
 function initializeColorScheme() {
@@ -298,9 +300,15 @@ function initiateLangauage() {
 
   const lang = document.documentElement.lang;
 
+  changeLanguageOuterLayer(lang);
   changeLanguageMain(lang);
   changeLanguageHeader(lang);
   changeLanguageDateTimeline(lang);
+  changeLanguageTitle(lang);
+  changeTimelineHoverTexts(lang);
+  changeBirthdayTexts(lang);
+
+  return lang;
 }
 
 function getLangugageFromLocalStorage() {
@@ -362,7 +370,7 @@ function changeLanguageOuterLayer(lang) {
 
     main.style.transform = `translateX(${farsiElement.offsetWidth}px)`;
 
-    englishElement.style.transform = `translateX(100%)`;
+    englishElement.style.transform = `translateX(0)`;
     englishElement.style.opacity = 1;
   } else if (lang === "fa") {
     farsiElement.style.transform = `translateX(0)`;
@@ -370,7 +378,7 @@ function changeLanguageOuterLayer(lang) {
 
     main.style.transform = `translateX(0)`;
 
-    englishElement.style.transform = `translateX(0)`;
+    englishElement.style.transform = `translateX(-100%)`;
     englishElement.style.opacity = 0;
   }
 
@@ -451,7 +459,17 @@ function getMainHeight(lang) {
     return result + jobHeight + commonMargin;
   }, 0);
 
-  return headerHeight + headerAndFirstJobCommonMargin + sumOfJobsHeight + 40;
+  const pageControlsHeight = parseFloat(
+    window.getComputedStyle(document.querySelector(".page__controls")).height
+  );
+
+  return (
+    headerHeight +
+    headerAndFirstJobCommonMargin +
+    sumOfJobsHeight +
+    pageControlsHeight +
+    40
+  );
 }
 
 function updateDateTexts() {
@@ -611,7 +629,6 @@ function handleEnglishAndPersianElementSizes(lang) {
   const infoEnglish = document.querySelector("#info-english");
 
   infoEnglish.style.width = `${infoFarsi.offsetWidth}px`;
-  infoEnglish.style.left = `-${infoFarsi.offsetWidth}px`;
 
   animateTimeLines(document.documentElement.lang);
 

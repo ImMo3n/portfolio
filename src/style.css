@@ -1,13 +1,13 @@
 :root {
-  --font-color: white;
-  --body-background-color: white;
-  --personal-info-background-color: white;
-  --personal-info-background-color-with-alpha: white;
-  --main-background-color: white;
-  --page-controls-background-color: white;
-
-  --theme-color: white;
-  --hover-background-color: white;
+  --font-color: hsl(0, 0%, 93%);
+  --body-background-color: hsl(0, 0%, 12%);
+  --personal-info-background-color: hsl(0, 0%, 15%);
+  --personal-info-background-color-with-alpha: hsl(0, 0%, 15%, 0.85);
+  --main-background-color: hsl(0, 0%, 19%);
+  --page-controls-background-color: hsl(0, 0%, 19%, 0.7);
+  --theme-color: rgb(88, 203, 235);
+  --hover-info-background-color: hsl(0, 0%, 15%, 0.95);
+  --hover-info-border-color: hsl(0, 0%, 25%, 1);
 }
 
 *,
@@ -325,6 +325,30 @@ label:has(#languageCheckbox:not(:checked)) .label__language {
   color: var(--theme-color);
 }
 
+.page__item__info {
+  position: fixed;
+  padding-inline: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background-color: var(--hover-info-background-color);
+  border-radius: 5px;
+  /* line-height: 0; */
+  border: 1px solid var(--hover-info-border-color);
+  font-size: 0.75rem;
+  /* white-space: ; */
+  /* display: inline-block; */
+  /* width: auto; */
+}
+
+.page__item__info__span {
+  cursor: default;
+  border-bottom: 1px solid var(--hover-info-border-color);
+}
+
+html[lang="en"] .page__item__info {
+  direction: ltr;
+}
+
 @keyframes pulse {
   from {
     background-color: gray;
@@ -337,6 +361,13 @@ label:has(#languageCheckbox:not(:checked)) .label__language {
 @media only screen and (max-width: 1100px) {
   .page__wrapper {
     flex-direction: column;
+  }
+
+  html {
+    overflow-x: hidden;
+  }
+  body {
+    overflow: hidden;
   }
 
   .main__wrapper {
@@ -360,10 +391,11 @@ label:has(#languageCheckbox:not(:checked)) .label__language {
   }
 
   .page__controls {
-    position: sticky;
+    position: fixed;
     flex-direction: row;
     bottom: 0;
     right: 0;
+    width: 100vw;
     padding-block: 16px;
     background-color: var(--personal-info-background-color-with-alpha);
   }
@@ -382,25 +414,4 @@ label:has(#languageCheckbox:not(:checked)) .label__language {
   .career__timeline {
     display: none;
   }
-}
-
-.page__item__info {
-  position: fixed;
-  padding-inline: 8px;
-  padding-top: 16px;
-  padding-bottom: 12px;
-  background-color: var(--hover-info-background-color);
-  border-radius: 5px;
-  line-height: 0;
-  border: 1px solid var(--hover-info-border-color);
-  font-size: 0.75rem;
-}
-
-.page__item__info__span {
-  cursor: default;
-  border-bottom: 1px solid var(--hover-info-border-color);
-}
-
-html[lang="en"] .page__item__info {
-  direction: ltr;
 }
